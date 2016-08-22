@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+
+  "parameters": {
+    "vmName": {
+      "type": "string",
+      "defaultValue": "VM01"
+    },
+    "vmStorageAccountName": {
+      "type": "string",
+      "defaultValue": null
+    },
+    "vmStorageAccountContainerName": {
+      "type": "string",
+      "defaultValue": "vhds"
+    },
+    "vmDataDiskSize": {
+      "type": "string",
+      "defaultValue": "127"
+    },
+    "dscLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "The location of DSC modules upon which the script is dependent"
+      },
+      "defaultValue": null
+    }
+  },
+
+  "variables": {
+    "windowsServerVersion": "2012-R2-Datacenter",
+    "formatDiskModulesURL": "[concat(parameters('dscLocation'),'FormatDisk.ps1.zip')]",
+    "formatDiskConfigurationFunction": "FormatDisk.ps1\\FormatDisk"
+  },
+
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('vmName')]",
+      "apiVersion": "2015-06-15",
+      "location": "[resourceGroup().location]",
+        "storageProfile": {
+          "dataDisks": [
+            {
+              "lun": 0,
+              "name": "[concat(parameters('vmName'),'-datadisk1')]",
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('https', '://', parameters('vmStorageAccountName'), '.blob.core.windows.net/', parameters('vmStorageAccountContainerName'), '/', tolower(parameters('vmName')), 'datadisk1.vhd')]"
+              },
+              "caching": "None",
+              "diskSizeGB": "[parameters('vmDataDiskSize')]"
+            }
+          ]
+        }
+      }    
+  ],
+
+  "outputs": {
+
+  }
+}

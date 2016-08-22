@@ -106,14 +106,15 @@
   },
 
   "variables": {
-    "deploymentName": "[resourceGroup().name]",
+    "deploymentName": "[deployment().Name]",
     "templateLocationURI": "[concat(parameters('assetLocationURI'),'Templates/')]",
     "dscLocationURI": "[concat(parameters('assetLocationURI'),'DSC/')]",
     "apiVersion": "2015-01-01",
     "vmVHdContainerName": "vhds",
     "StorageAccount-DeploymentName": "[concat(variables('deploymentName'),'-StorageAccount')]",
     "Network-AzureDNS-DeploymentName": "[concat(variables('deploymentName'),'-Nework-AzureDNS')]",
-    "DomainController-DeploymentName": "[concat(variables('deploymentName'), '-DomainController')]"
+    "DomainController-VM-DeploymentName": "[concat(variables('deploymentName'), '-DomainController-VM')]",
+    "DomainController-DataDisk-DeploymentName": "[concat(variables('deploymentName'), '-DomainController-DataDisk')]"
   },
   "resources": [
     {
@@ -151,7 +152,7 @@
       }
     },
     {
-      "name": "[variables('DomainController-DeploymentName')]",
+      "name": "[variables('DomainController-VM-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "[variables('apiVersion')]",
       "properties": {
@@ -170,10 +171,27 @@
           "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet1.value]" }
         }
       }
+    },
+    {
+      "name": "[variables('DomainController-DataDisk-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "[variables('apiVersion')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLocationURI'), 'DataDisk.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[parameters('domainControllerName')]" },
+          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
+          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
+          "dscLocation": { "value": "[variables('dscLocationURI')]" }
+        }
+      },
+
+
+      "outputs": {
+
+      }
     }
-  ],
-
-  "outputs": {
-
-  }
-}
