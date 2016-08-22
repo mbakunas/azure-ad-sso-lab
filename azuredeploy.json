@@ -133,7 +133,7 @@
       }
     },
     {
-      "name": "[[variables('Network-AzureDNS-DeploymentName')]",
+      "name": "[variables('Network-AzureDNS-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "[variables('apiVersion')]",
       "properties": {
