@@ -5,7 +5,7 @@
   "parameters": {
     "vmName": {
       "type": "string",
-      "defaultValue": "VM01"
+      "defaultValue": null
     },
     "vmStorageAccountName": {
       "type": "string",
@@ -29,7 +29,6 @@
   },
 
   "variables": {
-    "windowsServerVersion": "2012-R2-Datacenter",
     "formatDiskModulesURL": "[concat(parameters('dscLocation'),'FormatDisk.ps1.zip')]",
     "formatDiskConfigurationFunction": "FormatDisk.ps1\\FormatDisk"
   },
