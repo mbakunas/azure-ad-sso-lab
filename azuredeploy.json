@@ -116,6 +116,7 @@
     "DomainController-VM-DeploymentName": "[concat(variables('deploymentName'), '-DomainController-VM')]",
     "DomainController-DataDisk-DeploymentName": "[concat(variables('deploymentName'), '-DomainController-DataDisk')]"
   },
+
   "resources": [
     {
       "name": "[variables('StorageAccount-DeploymentName')]",
@@ -181,18 +182,16 @@
         "templateLink": {
           "uri": "[concat(variables('templateLocationURI'), 'DataDisk.json')]",
           "contentVersion": "1.0.0.0"
+        },
+          "parameters": {
+            "vmName": { "value": "[parameters('domainControllerName')]" },
+            "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
+            "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
+            "dscLocation": { "value": "[variables('dscLocationURI')]" }
         }
-      },
-      "parameters": {
-        "vmName": { "value": "[parameters('domainControllerName')]" },
-        "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
-        "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
-        "dscLocation": { "value": "[variables('dscLocationURI')]" }
       }
     }
   ],
 
-      "outputs": {
-
-      }
-    }
+  "outputs": {}
+}
