@@ -167,7 +167,7 @@
           "adminPassword": { "value": "[parameters('adminPassword')]" },
           "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
           "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
-          "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet2.value]" }
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet1.value]" }
         }
       }
     }
