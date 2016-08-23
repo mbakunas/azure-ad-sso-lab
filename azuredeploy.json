@@ -439,7 +439,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-02-01",
       "dependsOn": [
-        "[variables('RemoteDesktop-DeploymentName')]"
+        "[variables('ADFS-Server-DeploymentName')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -512,7 +512,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-02-01",
       "dependsOn": [
-        "[variables('RemoteDesktop-DeploymentName')]"
+        "[variables('DirSync-DeploymentName')]"
       ],
       "properties": {
         "mode": "Incremental",
