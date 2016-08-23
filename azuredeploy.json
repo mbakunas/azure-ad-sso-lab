@@ -120,7 +120,7 @@
       "metadata": {
         "description": "The IP address of the VM hosting AD DS"
       },
-      "defaultValue": "10.0.0.4"
+      "defaultValue": "10.0.1.4"
     },
     "adDSdomainName": {
       "type": "string",
