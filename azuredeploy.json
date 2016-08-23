@@ -317,7 +317,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'VM-data-disk-publicIP.json')]",
+          "uri": "[concat(variables('templateLocationURI'), 'VM-publicIP.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
