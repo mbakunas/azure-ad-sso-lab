@@ -195,6 +195,80 @@
         "description": "The size of the data disk on the VM hosting the first server in the ADFS farm"
       },
       "defaultValue": "50"
+    },
+    "adfsProxyName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the ADFS web proxy VM"
+      },
+      "defaultValue": "ADFSPRX01"
+    },
+    "adfsProxySize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_DS1_v2",
+        "Standard_D2_v2",
+        "Standard_DS2_v2",
+        "Standard_D3_v2",
+        "Standard_DS3_v2",
+        "Standard_D4_v2",
+        "Standard_DS4_v2",
+        "Standard_D11_v2",
+        "Standard_DS11_v2",
+        "Standard_D12_v2",
+        "Standard_DS12_v2",
+        "Standard_D13_v2",
+        "Standard_DS13_v2"
+      ],
+      "metadata": {
+        "description": "The size of the ADFS web proxy VM"
+      },
+      "defaultValue": "Standard_D1_v2"
+    },
+    "adfsProxyDataDiskSize": {
+      "type": "string",
+      "metadata": {
+        "description": "The size of the data disk on the ADFS web proxy VM"
+      },
+      "defaultValue": "50"
+    },
+    "dirSyncServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the synchronization engine VM (Azure AD Connect will be run on this VM)"
+      },
+      "defaultValue": "DIRSYNC01"
+    },
+    "dirSyncServerSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_DS1_v2",
+        "Standard_D2_v2",
+        "Standard_DS2_v2",
+        "Standard_D3_v2",
+        "Standard_DS3_v2",
+        "Standard_D4_v2",
+        "Standard_DS4_v2",
+        "Standard_D11_v2",
+        "Standard_DS11_v2",
+        "Standard_D12_v2",
+        "Standard_DS12_v2",
+        "Standard_D13_v2",
+        "Standard_DS13_v2"
+      ],
+      "metadata": {
+        "description": "The size of the synchronization engine VM"
+      },
+      "defaultValue": "Standard_D1_v2"
+    },
+    "dirSyncServerDataDiskSize": {
+      "type": "string",
+      "metadata": {
+        "description": "The size of the data disk on the synchronization engine VM"
+      },
+      "defaultValue": "50"
     }
   },
 
@@ -209,7 +283,10 @@
     "Network-CustomDNS-DeploymentName": "[concat(variables('deploymentName'), '-Network-CustomDNS')]",
     "RemoteDesktop-DeploymentName": "[concat(variables('deploymentName'),'-RemoteDesktop')]",
     "ADFS-Server-DeploymentName": "[concat(variables('deploymentName'),'-ADFS')]",
-    "ADFS-Server-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-ADFS-DomainJoin')]"
+    "ADFS-Server-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-ADFS-DomainJoin')]",
+    "ADFS-Proxy-DeploymentName": "[concat(variables('deploymentName'),'-ADFS-Proxy')]",
+    "DirSync-DeploymentName": "[concat(variables('deploymentName'),'-DirSync')]",
+    "DirSync-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-DirSync-DomainJoin')]"
   },
 
   "resources": [
@@ -353,7 +430,7 @@
           "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
           "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet2.value]" },
           "vmDataDiskSize": { "value": "[parameters('adfsServerDataDiskSize')]" },
-          "dscLocation":  { "value": "[variables('dscLocationURI')]" }
+          "dscLocation": { "value": "[variables('dscLocationURI')]" }
         }
       }
     },
@@ -372,6 +449,79 @@
         },
         "parameters": {
           "vmName": { "value": "[parameters('adfsServerName')]" },
+          "domainToJoin": { "value": "[parameters('adDSdomainName')]" },
+          "domainUserName": { "value": "[parameters('adminUserName')]" },
+          "domainPassword": { "value": "[parameters('adminPassword')]" }
+        }
+      }
+    },
+    {
+      "name": "[variables('ADFS-Proxy-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('Network-CustomDNS-DeploymentName')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLocationURI'), 'VM-data-disk-publicIP.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[parameters('adfsProxyName')]" },
+          "vmSize": { "value": "[parameters('adfsProxySize')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" },
+          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
+          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet1.value]" },
+          "vmDataDiskSize": { "value": "[parameters('adfsProxyDataDiskSize')]" },
+          "dscLocation": { "value": "[variables('dscLocationURI')]" }
+        }
+      }
+    },
+    {
+      "name": "[variables('DirSync-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('Network-CustomDNS-DeploymentName')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLocationURI'), 'VM-data-disk.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[parameters('dirSyncServerName')]" },
+          "vmSize": { "value": "[parameters('dirSyncServerSize')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" },
+          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
+          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet2.value]" },
+          "vmDataDiskSize": { "value": "[parameters('dirSyncServerDataDiskSize')]" },
+          "dscLocation": { "value": "[variables('dscLocationURI')]" }
+        }
+      }
+    },
+    {
+      "name": "[variables('DirSync-DomainJoin-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('RemoteDesktop-DeploymentName')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLocationURI'), 'VM-domain-join.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[parameters('dirSyncServerName')]" },
           "domainToJoin": { "value": "[parameters('adDSdomainName')]" },
           "domainUserName": { "value": "[parameters('adminUserName')]" },
           "domainPassword": { "value": "[parameters('adminPassword')]" }
