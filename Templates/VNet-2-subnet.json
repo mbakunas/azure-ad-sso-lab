@@ -1,0 +1,149 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "VNet"
+    },
+    "vnetAddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/23"
+    },
+    "subnet1Name": {
+      "type": "string",
+      "defaultValue": "ExtraNet"
+    },
+    "subnet1AddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24"
+    },
+    "subnet2Name": {
+      "type": "string",
+      "defaultValue": "CorpNet"
+    },
+    "subnet2AddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/24"
+    },
+    "networkSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "NetworkSecurityGroup"
+    }
+  },
+
+  "variables": {
+    "apiVersion": "2016-03-30"
+  },
+
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('vnetName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+      ],
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetAddressSpace')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('subnet1Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnet1AddressSpace')]"
+            }
+          },
+          {
+            "name": "[parameters('subnet2Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnet2AddressSpace')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+              }
+            }
+          }
+        ]
+      }
+
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('networkSecurityGroupName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "[concat('inbound-allow-',toLower(parameters('subnet1Name')),'-433')]",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "433",
+              "sourceAddressPrefix": "[parameters('subnet1AddressSpace')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2010,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "[concat('inbound-allow-',toLower(parameters('subnet1Name')),'-3389')]",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "[parameters('subnet1AddressSpace')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2020,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "[concat('inbound-allow-',toLower(parameters('subnet1Name')),'-53')]",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "53",
+              "sourceAddressPrefix": "[parameters('subnet1AddressSpace')]",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 2030,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "[concat('inbound-deny-',toLower(parameters('subnet1Name')),'-all')]",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "[parameters('subnet1AddressSpace')]",
+              "destinationAddressPrefix": "*",
+              "access": "Deny",
+              "priority": 2900,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    }
+  ],
+
+  "outputs": {
+    "subnet1": {
+      "type": "string",
+      "value": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnet1Name'))]"
+    },
+    "subnet2": {
+      "type": "string",
+      "value": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnet2Name'))]"
+    }
+  }
+
+}
