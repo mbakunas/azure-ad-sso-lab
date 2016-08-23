@@ -154,7 +154,7 @@
     "templateLocationURI": "[concat(parameters('assetLocationURI'),'Templates/')]",
     "dscLocationURI": "[concat(parameters('assetLocationURI'),'DSC/')]",
     "vmVHdContainerName": "vhds",
-    "domainJoinOptions": "3",
+    "domainJoinOptions": 3,
     "StorageAccount-DeploymentName": "[concat(variables('deploymentName'),'-StorageAccount')]",
     "Network-AzureDNS-DeploymentName": "[concat(variables('deploymentName'),'-Nework-AzureDNS')]",
     "DomainController-DeploymentName": "[concat(variables('deploymentName'), '-DomainController')]",
