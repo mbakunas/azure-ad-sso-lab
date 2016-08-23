@@ -1,4 +1,4 @@
-# Create an Azure single sign-on lab environment
+# Create an Azure Active Directory single sign-on lab environment
 
 This template will deploy a set of VMs that can be used as an Azure AD single sign-on lab.
 
