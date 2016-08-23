@@ -8,7 +8,7 @@ This template will deploy a set of VMs that can be used as an Azure AD single si
 
 ## Networking
 
-The virtual network has two subnets:  an external-facing subnet an an internal subnet.  An network security group on the internal subnet prevents all inbound traffic and only allows 53, 443 and 3389 from the external subnet.
+The virtual network has two subnets:  an external-facing subnet an an internal subnet.  A network security group on the internal subnet prevents all inbound traffic and only allows 53, 443, and 3389 from the external subnet.
 
 ## VMs
 
