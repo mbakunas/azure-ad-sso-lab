@@ -43,7 +43,7 @@
       "metadata": {
         "description": "The address range of the new VNet in CIDR format"
       },
-      "defaultValue": "10.0.0.0/24"
+      "defaultValue": "10.0.0.0/23"
     },
     "subnet1Name": {
       "type": "string",
@@ -58,6 +58,18 @@
         "description": "The address range of the subnet created in the new VNet"
       },
       "defaultValue": "10.0.0.0/24"
+    },
+    "subnet2Name": {
+      "type": "string",
+      "defaultValue": "CorpNet"
+    },
+    "subnet2AddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/24"
+    },
+    "networkSecurityGroupName": {
+      "type": "string",
+      "defaultValue": null
     },
     "adminUsername": {
       "type": "string",
@@ -117,14 +129,14 @@
       },
       "defaultValue": "contoso.com"
     },
-    "remoteDesktopName": {
+    "remoteDesktopGatewayName": {
       "type": "string",
       "metadata": {
         "description": "The name of the remote desktop VM"
       },
       "defaultValue": "RD01"
     },
-    "remoteDesktopSize": {
+    "remoteDesktopGatewaySize": {
       "type": "string",
       "allowedValues": [
         "Standard_D1_v2",
@@ -146,6 +158,43 @@
         "description": "The size of the remote desktop VM"
       },
       "defaultValue": "Standard_D1_v2"
+    },
+    "adfsServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the VM hosting the first server in the ADFS farm"
+      },
+      "defaultValue": "ADFSSTS01"
+    },
+    "adfsServerSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_DS1_v2",
+        "Standard_D2_v2",
+        "Standard_DS2_v2",
+        "Standard_D3_v2",
+        "Standard_DS3_v2",
+        "Standard_D4_v2",
+        "Standard_DS4_v2",
+        "Standard_D11_v2",
+        "Standard_DS11_v2",
+        "Standard_D12_v2",
+        "Standard_DS12_v2",
+        "Standard_D13_v2",
+        "Standard_DS13_v2"
+      ],
+      "metadata": {
+        "description": "The size of the VM hosting the first server in the ADFS farm"
+      },
+      "defaultValue": "Standard_D1_v2"
+    },
+    "adfsServerDataDiskSize": {
+      "type": "string",
+      "metadata": {
+        "description": "The size of the data disk on the VM hosting the first server in the ADFS farm"
+      },
+      "defaultValue": "50"
     }
   },
 
@@ -159,7 +208,8 @@
     "DomainController-DeploymentName": "[concat(variables('deploymentName'), '-DomainController')]",
     "Network-CustomDNS-DeploymentName": "[concat(variables('deploymentName'), '-Network-CustomDNS')]",
     "RemoteDesktop-DeploymentName": "[concat(variables('deploymentName'),'-RemoteDesktop')]",
-    "RemoteDesktop-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-RemoteDesktop-DomainJoin')]"
+    "ADFS-Server-DeploymentName": "[concat(variables('deploymentName'),'-ADFS')]",
+    "ADFS-Server-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-ADFS-DomainJoin')]"
   },
 
   "resources": [
@@ -193,7 +243,10 @@
           "vnetName": { "value": "[parameters('vnetName')]" },
           "vnetAddressSpace": { "value": "[parameters('vnetAddressSpace')]" },
           "subnet1Name": { "value": "[parameters('subnet1Name')]" },
-          "subnet1AddressSpace": { "value": "[parameters('subnet1AddressSpace')]" }
+          "subnet1AddressSpace": { "value": "[parameters('subnet1AddressSpace')]" },
+          "subnet2Name": { "value": "[parameters('subnet2Name')]" },
+          "subnet2AddressSpace": { "value": "[parameters('subnet2AddressSpace')]" },
+          "networkSecurityGroupName": { "value": "[parameters('networkSecurityGroupName')]" }
         }
       }
     },
@@ -218,7 +271,7 @@
           "adminPassword": { "value": "[parameters('adminPassword')]" },
           "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
           "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
-          "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet1.value]" },
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet2.value]" },
           "dscLocation": { "value": "[variables('dscLocationURI')]" },
           "domainName": { "value": "[parameters('adDSdomainName')]" },
           "dcIpAddress": { "value": "[parameters('domainControllerIpAddress')]" }
@@ -243,6 +296,9 @@
           "vnetAddressSpace": { "value": "[parameters('vnetAddressSpace')]" },
           "subnet1Name": { "value": "[parameters('subnet1Name')]" },
           "subnet1AddressSpace": { "value": "[parameters('subnet1AddressSpace')]" },
+          "subnet2Name": { "value": "[parameters('subnet2Name')]" },
+          "subnet2AddressSpace": { "value": "[parameters('subnet2AddressSpace')]" },
+          "networkSecurityGroupName": { "value": "[parameters('networkSecurityGroupName')]" },
           "dnsServers": {
             "value": [
               "[parameters('domainControllerIpAddress')]"
@@ -265,20 +321,44 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "vmName": { "value": "[parameters('remoteDesktopName')]" },
-          "vmSize": { "value": "[parameters('remoteDesktopSize')]" },
+          "vmName": { "value": "[parameters('remoteDesktopGatewayName')]" },
+          "vmSize": { "value": "[parameters('remoteDesktopGatewaySize')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
           "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
           "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
-          "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet1.value]" },
-          "vmDataDiskSize": { "value": "50" },
-          "dscLocation": { "value": "[variables('dscLocationURI')]" }
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet1.value]" }
         }
       }
     },
     {
-      "name": "[variables('RemoteDesktop-DomainJoin-DeploymentName')]",
+      "name": "[variables('ADFS-Server-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('Network-CustomDNS-DeploymentName')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLocationURI'), 'VM-data-disk.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[parameters('adfsServerName')]" },
+          "vmSize": { "value": "[parameters('adfsServerSize')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" },
+          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
+          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet2.value]" },
+          "vmDataDiskSize": { "value": "[parameters('adfsServerDataDiskSize')]" },
+          "dscLocation":  { "value": "[variables('dscLocationURI')]" }
+        }
+      }
+    },
+    {
+      "name": "[variables('ADFS-Server-DomainJoin-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-02-01",
       "dependsOn": [
@@ -287,11 +367,11 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'VM-domain-join.json')]",
+          "uri": "[concat(variables('templateLocationURI'), 'VM-publicIp.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "vmName": { "value": "[parameters('remoteDesktopName')]" },
+          "vmName": { "value": "[parameters('adfsServerName')]" },
           "domainToJoin": { "value": "[parameters('adDSdomainName')]" },
           "domainUserName": { "value": "[parameters('adminUserName')]" },
           "domainPassword": { "value": "[parameters('adminPassword')]" }
