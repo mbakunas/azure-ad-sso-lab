@@ -291,10 +291,10 @@
         },
         "parameters": {
           "vmName": { "value": "[parameters('remoteDesktopName')]" },
-          "domainToJoin": "[parameters('adDSdomainName')]",
-          "domainJoinOptions": "[variables('domainJoinOptions')]",
-          "domainUserName": "[parameters('adminUserName')]",
-          "domainPassword": "[parameters('adminPassword')]"
+          "domainToJoin": { "value": "[parameters('adDSdomainName')]" },
+          "domainJoinOptions": { "value": "[variables('domainJoinOptions')]" },
+          "domainUserName": { "value": "[parameters('adminUserName')]" },
+          "domainPassword": { "value": "[parameters('adminPassword')]" }
         }
       }
     }
