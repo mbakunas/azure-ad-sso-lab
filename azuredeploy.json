@@ -154,7 +154,6 @@
     "templateLocationURI": "[concat(parameters('assetLocationURI'),'Templates/')]",
     "dscLocationURI": "[concat(parameters('assetLocationURI'),'DSC/')]",
     "vmVHdContainerName": "vhds",
-    "domainJoinOptions": 3,
     "StorageAccount-DeploymentName": "[concat(variables('deploymentName'),'-StorageAccount')]",
     "Network-AzureDNS-DeploymentName": "[concat(variables('deploymentName'),'-Nework-AzureDNS')]",
     "DomainController-DeploymentName": "[concat(variables('deploymentName'), '-DomainController')]",
@@ -292,7 +291,6 @@
         "parameters": {
           "vmName": { "value": "[parameters('remoteDesktopName')]" },
           "domainToJoin": { "value": "[parameters('adDSdomainName')]" },
-          "domainJoinOptions": { "value": "[variables('domainJoinOptions')]" },
           "domainUserName": { "value": "[parameters('adminUserName')]" },
           "domainPassword": { "value": "[parameters('adminPassword')]" }
         }
