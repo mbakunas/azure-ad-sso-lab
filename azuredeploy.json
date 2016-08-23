@@ -177,6 +177,9 @@
       "name": "[variables('DomainController-DataDisk-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "[variables('apiVersion')]",
+      "dependsOn": [
+        "[resourceID('Microsoft.Resources/deployments',variables('DomainController-VM-DeploymentName'))]"
+      ]
       "properties": {
         "mode": "Incremental",
         "templateLink": {
