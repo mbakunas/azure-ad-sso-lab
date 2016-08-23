@@ -134,7 +134,7 @@
       "metadata": {
         "description": "The name of the remote desktop VM"
       },
-      "defaultValue": "RD01"
+      "defaultValue": "RDGW01"
     },
     "remoteDesktopGatewaySize": {
       "type": "string",
@@ -367,7 +367,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'VM-publicIP.json')]",
+          "uri": "[concat(variables('templateLocationURI'), 'VM-domain-join.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
