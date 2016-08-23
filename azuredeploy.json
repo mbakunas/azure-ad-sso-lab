@@ -109,7 +109,6 @@
     "deploymentName": "[deployment().Name]",
     "templateLocationURI": "[concat(parameters('assetLocationURI'),'Templates/')]",
     "dscLocationURI": "[concat(parameters('assetLocationURI'),'DSC/')]",
-    "apiVersion": "2015-01-01",
     "vmVHdContainerName": "vhds",
     "StorageAccount-DeploymentName": "[concat(variables('deploymentName'),'-StorageAccount')]",
     "Network-AzureDNS-DeploymentName": "[concat(variables('deploymentName'),'-Nework-AzureDNS')]",
@@ -121,7 +120,7 @@
     {
       "name": "[variables('StorageAccount-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -137,7 +136,7 @@
     {
       "name": "[variables('Network-AzureDNS-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -155,7 +154,7 @@
     {
       "name": "[variables('DomainController-VM-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2016-02-01",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -176,9 +175,9 @@
     {
       "name": "[variables('DomainController-DataDisk-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2016-02-01",
       "dependsOn": [
-        "[resourceID('Microsoft.Resources/deployments',variables('DomainController-VM-DeploymentName'))]"
+        "[variables('DomainController-VM-DeploymentName')]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -191,6 +190,7 @@
           "vmSize": { "value": "[parameters('domainControllerSize')]" },
           "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
           "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
+          "vmDataDiskSize":{ "value": "127" },
           "dscLocation": { "value": "[variables('dscLocationURI')]" }
         }
       }
