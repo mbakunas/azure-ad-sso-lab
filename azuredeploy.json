@@ -102,6 +102,50 @@
         "description": "The size of the VM hosting AD DS"
       },
       "defaultValue": "Standard_D1_v2"
+    },
+    "domainControllerIpAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "The IP address of the VM hosting AD DS"
+      },
+      "defaultValue": "10.0.0.4"
+    },
+    "adDSdomainName": {
+      "type": "string",
+      "metadata": {
+        "description": "The FQDN of the AD DS domain to be created"
+      },
+      "defaultValue": "contoso.com"
+    },
+    "remoteDesktopName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the remote desktop VM"
+      },
+      "defaultValue": "RD01"
+    },
+    "remoteDesktopSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_DS1_v2",
+        "Standard_D2_v2",
+        "Standard_DS2_v2",
+        "Standard_D3_v2",
+        "Standard_DS3_v2",
+        "Standard_D4_v2",
+        "Standard_DS4_v2",
+        "Standard_D11_v2",
+        "Standard_DS11_v2",
+        "Standard_D12_v2",
+        "Standard_DS12_v2",
+        "Standard_D13_v2",
+        "Standard_DS13_v2"
+      ],
+      "metadata": {
+        "description": "The size of the remote desktop VM"
+      },
+      "defaultValue": "Standard_D1_v2"
     }
   },
 
@@ -110,10 +154,13 @@
     "templateLocationURI": "[concat(parameters('assetLocationURI'),'Templates/')]",
     "dscLocationURI": "[concat(parameters('assetLocationURI'),'DSC/')]",
     "vmVHdContainerName": "vhds",
+    "domainJoinOptions": "3",
     "StorageAccount-DeploymentName": "[concat(variables('deploymentName'),'-StorageAccount')]",
     "Network-AzureDNS-DeploymentName": "[concat(variables('deploymentName'),'-Nework-AzureDNS')]",
-    "DomainController-VM-DeploymentName": "[concat(variables('deploymentName'), '-DomainController-VM')]",
-    "DomainController-DataDisk-DeploymentName": "[concat(variables('deploymentName'), '-DomainController-DataDisk')]"
+    "DomainController-DeploymentName": "[concat(variables('deploymentName'), '-DomainController')]",
+    "Network-CustomDNS-DeploymentName": "[concat(variables('deploymentName'), '-Network-CustomDNS')]",
+    "RemoteDesktop-DeploymentName": "[concat(variables('deploymentName'),'-RemoteDesktop')]",
+    "RemoteDesktop-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-RemoteDesktop-DomainJoin')]"
   },
 
   "resources": [
@@ -152,13 +199,17 @@
       }
     },
     {
-      "name": "[variables('DomainController-VM-DeploymentName')]",
+      "name": "[variables('DomainController-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('StorageAccount-DeploymentName')]",
+        "[variables('Network-AzureDNS-DeploymentName')]"
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'VM.json')]",
+          "uri": "[concat(variables('templateLocationURI'), 'VM-DC.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -168,30 +219,82 @@
           "adminPassword": { "value": "[parameters('adminPassword')]" },
           "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
           "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
-          "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet1.value]" }
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet1.value]" },
+          "dscLocation": { "value": "[variables('dscLocationURI')]" },
+          "domainName": { "value": "[parameters('adDSdomainName')]" },
+          "dcIpAddress": { "value": "[parameters('domainControllerIpAddress')]" }
         }
       }
     },
     {
-      "name": "[variables('DomainController-DataDisk-DeploymentName')]",
+      "name": "[variables('Network-CustomDNS-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-02-01",
       "dependsOn": [
-        "[variables('DomainController-VM-DeploymentName')]"
+        "[variables('DomainController-DeploymentName')]"
       ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'DataDisk.json')]",
+          "uri": "[concat(variables('templateLocationURI'), 'VNet-1-subnet-custom-DNS.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "vmName": { "value": "[parameters('domainControllerName')]" },
-          "vmSize": { "value": "[parameters('domainControllerSize')]" },
+          "vnetName": { "value": "[parameters('vnetName')]" },
+          "vnetAddressSpace": { "value": "[parameters('vnetAddressSpace')]" },
+          "subnet1Name": { "value": "[parameters('subnet1Name')]" },
+          "subnet1AddressSpace": { "value": "[parameters('subnet1AddressSpace')]" },
+          "dnsServers": {
+            "value": [
+              "[parameters('domainControllerIpAddress')]"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "[variables('RemoteDesktop-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('Network-CustomDNS-DeploymentName')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLocationURI'), 'VM-data-disk-publicIP.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[parameters('remoteDesktopName')]" },
+          "vmSize": { "value": "[parameters('remoteDesktopSize')]" },
+          "adminUsername": { "value": "[parameters('adminUsername')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" },
           "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
           "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
-          "vmDataDiskSize":{ "value": "127" },
-          "dscLocation": { "value": "[variables('dscLocationURI')]" }
+          "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet1.value]" }
+        }
+      }
+    },
+    {
+      "name": "[variables('RemoteDesktop-DomainJoin-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('RemoteDesktop-DeploymentName')]"
+      ]
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLocationURI'), 'VM-domain-join.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[parameters('remoteDesktopName')]" },
+          "domainToJoin": "[parameters('adDSdomainName')]",
+          "domainJoinOptions": "[variables('domainJoinOptions')]",
+          "domainUserName": "[parameters('adminUserName')]",
+          "domainPassword": "[parameters('adminPassword')]"
         }
       }
     }
