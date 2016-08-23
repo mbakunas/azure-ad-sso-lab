@@ -183,11 +183,12 @@
           "uri": "[concat(variables('templateLocationURI'), 'DataDisk.json')]",
           "contentVersion": "1.0.0.0"
         },
-          "parameters": {
-            "vmName": { "value": "[parameters('domainControllerName')]" },
-            "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
-            "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
-            "dscLocation": { "value": "[variables('dscLocationURI')]" }
+        "parameters": {
+          "vmName": { "value": "[parameters('domainControllerName')]" },
+          "vmSize": { "value": "[parameters('domainControllerSize')]" },
+          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
+          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
+          "dscLocation": { "value": "[variables('dscLocationURI')]" }
         }
       }
     }

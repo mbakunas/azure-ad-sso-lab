@@ -7,6 +7,10 @@
       "type": "string",
       "defaultValue": null
     },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": null
+    },
     "vmStorageAccountName": {
       "type": "string",
       "defaultValue": null
@@ -39,7 +43,26 @@
       "name": "[parameters('vmName')]",
       "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('vmName'),'-NIC'))]"
+            }
+          ]
+        },
         "storageProfile": {
+          "osDisk": {
+            "name": "[concat(parameters('vmName'),'-osdisk')]",
+            "createOption": "FromImage",
+            "vhd": {
+              "uri": "[concat('https', '://', parameters('vmStorageAccountName'), '.blob.core.windows.net/',parameters('vmStorageAccountContainerName'), '/', tolower(parameters('vmName')), 'osdisk.vhd')]"
+            },
+            "caching": "ReadWrite"
+          },
           "dataDisks": [
             {
               "lun": 0,
@@ -53,7 +76,8 @@
             }
           ]
         }
-      }    
+      }
+    }
   ],
 
   "outputs": {
