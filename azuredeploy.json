@@ -282,7 +282,7 @@
       "apiVersion": "2016-02-01",
       "dependsOn": [
         "[variables('RemoteDesktop-DeploymentName')]"
-      ]
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
