@@ -194,7 +194,7 @@
       "metadata": {
         "description": "The size of the data disk on the VM hosting the first server in the ADFS farm"
       },
-      "defaultValue": "51"
+      "defaultValue": "50"
     }
   },
 
