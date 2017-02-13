@@ -1,8 +1,12 @@
 # Create an Azure Active Directory single sign-on lab environment
 
+<<<<<<< HEAD
+This template will deploy a set of Windows Server 2016 VMs that can be used as an Azure AD single sign-on lab.
+=======
 This template will deploy a set of Windows Server 2012R2 VMs that can be used as an Azure AD single sign-on lab.
+>>>>>>> refs/remotes/origin/master
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmbakunas%2Fazure-ad-sso-lab%2Fmaster%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmbakunas%2Fazure-ad-sso-lab%2Fdev-2016%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 

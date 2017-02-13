@@ -34,7 +34,7 @@
   },
 
   "variables": {
-    "windowsServerVersion": "2012-R2-Datacenter"
+    "windowsServerVersion": "2016-Datacenter"
   },
 
   "resources": [
