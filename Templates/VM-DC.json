@@ -52,7 +52,7 @@
   },
 
   "variables": {
-    "windowsServerVersion": "2012-R2-Datacenter",
+    "windowsServerVersion": "2016-Datacenter",
     "adModulesURL": "[concat(parameters('dscLocation'),'MakeDC.ps1.zip')]",
     "adConfigurationFunction": "MakeDC.ps1\\MakeDC"
   },
