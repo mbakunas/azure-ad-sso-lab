@@ -19,27 +19,36 @@
       "type": "securestring",
       "defaultValue": null
     },
-    "vmNIcVNetName": {
+    "vmNIcSubnetId": {
       "type": "string",
       "defaultValue": null
     },
-    "vmNIcSubnetName": {
+    "addDataDisks": {
       "type": "string",
-      "defaultValue": null
+      "defaultValue": "no",
+      "allowedValues": [
+        "yes",
+        "no"
+      ],
+      "metadata": {
+        "description": "Add data disk(s) to the VM?"
+      }
+    },
+    "vmDataDiskSize": {
+      "type": "string",
+      "defaultValue": "127"
     }
   },
 
   "variables": {
-    "windowsServerVersion": "2016-Datacenter",
-    "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vmNIcVNetName'))]",
-    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('vmNIcSubnetName'))]"
+    "windowsServerVersion": "2016-Datacenter"
   },
 
   "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('vmName')]",
-      "apiVersion": "2017-03-30",
+      "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'),'-NIC'))]"
@@ -67,10 +76,18 @@
           "osDisk": {
             "name": "[concat(parameters('vmName'),'-osdisk')]",
             "createOption": "FromImage",
-            "managedDisk": {
-                "storageAccountType": "Standard_LRS"
+            "caching": "ReadWrite"
+          },
+          "dataDisks": [
+            {
+              "condition": "[equals(parameters('addDataDisks'),'yes')]",
+              "lun": 0,
+              "name": "[concat(parameters('vmName'),'-datadisk1')]",
+              "createOption": "Empty",
+              "caching": "None",
+              "diskSizeGB": "[parameters('vmDataDiskSize')]"
             }
-          }
+          ]
         },
         "networkProfile": {
           "networkInterfaces": [
@@ -84,43 +101,21 @@
     {
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(parameters('vmName'),'-NIC')]",
-      "apiVersion": "2018-04-01",
+      "apiVersion": "2016-03-30",
       "location": "[resourceGroup().location]",
       "properties": {
         "ipConfigurations": [
           {
-              "name": "ipconfig1",
-              "properties": {
-                  "subnet": {
-                      "id": "[variables('subnetRef')]"
-                  },
-                  "privateIPAllocationMethod": "Dynamic"
+            "name": "ipconfig",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[parameters('vmNIcSubnetId')]"
               }
+            }
           }
         ]
       }
-    },
-    {
-        "name": "[concat('shutdown-computevm-',parameters('vmName'))]",
-        "type": "Microsoft.DevTestLab/schedules",
-        "apiVersion": "2017-04-26-preview",
-        "location": "[resourceGroup().location]",
-        "properties": {
-            "status": "Enabled",
-            "taskType": "ComputeVmShutdownTask",
-            "dailyRecurrence": {
-                "time": "19:00"
-            },
-            "timeZoneId": "Central Standard Time",
-            "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]",
-            "notificationSettings": {
-                "status": "Disabled",
-                "timeInMinutes": "30"
-            }
-        },
-        "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-        ]
     }
   ],
 
