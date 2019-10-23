@@ -69,10 +69,9 @@
           "osDisk": {
             "name": "[concat(parameters('vmName'),'-osdisk')]",
             "createOption": "FromImage",
-            "vhd": {
-              "uri": "[concat('https', '://', parameters('vmStorageAccountName'), '.blob.core.windows.net/',parameters('vmStorageAccountContainerName'), '/', tolower(parameters('vmName')), 'osdisk.vhd')]"
-            },
-            "caching": "ReadWrite"
+            "managedDisk": {
+                "storageAccountType": "Standard_LRS"
+            }
           }
         },
         "networkProfile": {
