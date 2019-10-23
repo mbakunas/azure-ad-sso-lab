@@ -10,27 +10,6 @@
       },
       "defaultValue": "https://raw.githubusercontent.com/mbakunas/azure-ad-sso-lab/master/"
     },
-    "storageAccountName": {
-      "type": "string",
-      "defaultValue": null,
-      "metadata": {
-        "description": "The name of the Storage Account to create"
-      }
-    },
-    "storageAccountType": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_RAGRS",
-        "Standard_ZRS",
-        "Premium_LRS"
-      ],
-      "metadata": {
-        "description": "The type of the storage account to be created"
-      },
-      "defaultValue": "Standard_LRS"
-    },
     "vnetName": {
       "type": "string",
       "metadata": {
@@ -276,8 +255,6 @@
     "deploymentName": "[deployment().Name]",
     "templateLocationURI": "[concat(parameters('assetLocationURI'),'Templates/')]",
     "dscLocationURI": "[concat(parameters('assetLocationURI'),'DSC/')]",
-    "vmVHdContainerName": "vhds",
-    "StorageAccount-DeploymentName": "[concat(variables('deploymentName'),'-StorageAccount')]",
     "Network-AzureDNS-DeploymentName": "[concat(variables('deploymentName'),'-Nework-AzureDNS')]",
     "DomainController-DeploymentName": "[concat(variables('deploymentName'), '-DomainController')]",
     "Network-CustomDNS-DeploymentName": "[concat(variables('deploymentName'), '-Network-CustomDNS')]",
@@ -290,22 +267,6 @@
   },
 
   "resources": [
-    {
-      "name": "[variables('StorageAccount-DeploymentName')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'StorageAccount.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": { "value": "[parameters('storageAccountName')]" },
-          "storageAccountType": { "value": "[parameters('storageAccountType')]" }
-        }
-      }
-    },
     {
       "name": "[variables('Network-AzureDNS-DeploymentName')]",
       "type": "Microsoft.Resources/deployments",
@@ -332,7 +293,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-02-01",
       "dependsOn": [
-        "[variables('StorageAccount-DeploymentName')]",
         "[variables('Network-AzureDNS-DeploymentName')]"
       ],
       "properties": {
@@ -346,8 +306,6 @@
           "vmSize": { "value": "[parameters('domainControllerSize')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
-          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
           "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet2.value]" },
           "dscLocation": { "value": "[variables('dscLocationURI')]" },
           "domainName": { "value": "[parameters('adDSdomainName')]" },
@@ -402,8 +360,6 @@
           "vmSize": { "value": "[parameters('remoteDesktopGatewaySize')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
-          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
           "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet1.value]" }
         }
       }
@@ -426,8 +382,6 @@
           "vmSize": { "value": "[parameters('adfsServerSize')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
-          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
           "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet2.value]" },
           "vmDataDiskSize": { "value": "[parameters('adfsServerDataDiskSize')]" },
           "dscLocation": { "value": "[variables('dscLocationURI')]" }
@@ -473,8 +427,6 @@
           "vmSize": { "value": "[parameters('adfsProxySize')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
-          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
           "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet1.value]" },
           "vmDataDiskSize": { "value": "[parameters('adfsProxyDataDiskSize')]" },
           "dscLocation": { "value": "[variables('dscLocationURI')]" }
@@ -499,8 +451,6 @@
           "vmSize": { "value": "[parameters('dirSyncServerSize')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmStorageAccountName": { "value": "[parameters('storageAccountName')]" },
-          "vmStorageAccountContainerName": { "value": "[variables('vmVHdContainerName')]" },
           "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet2.value]" },
           "vmDataDiskSize": { "value": "[parameters('dirSyncServerDataDiskSize')]" },
           "dscLocation": { "value": "[variables('dscLocationURI')]" }
