@@ -8,7 +8,7 @@
       "metadata": {
         "description": "The location of resources, such as templates and DSC modules, that the template depends on"
       },
-      "defaultValue": "https://raw.githubusercontent.com/mbakunas/azure-ad-sso-lab/dev-2016/"
+      "defaultValue": "https://raw.githubusercontent.com/mbakunas/azure-ad-sso-lab/master/"
     },
     "storageAccountName": {
       "type": "string",
