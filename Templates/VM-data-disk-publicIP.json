@@ -82,8 +82,8 @@
           "osDisk": {
             "name": "[concat(parameters('vmName'),'-osdisk')]",
             "createOption": "FromImage",
-            "vhd": {
-              "uri": "[concat('https', '://', parameters('vmStorageAccountName'), '.blob.core.windows.net/',parameters('vmStorageAccountContainerName'), '/', tolower(parameters('vmName')), 'osdisk.vhd')]"
+            "managedDisk": {
+                "storageAccountType": "Standard_LRS"
             },
             "caching": "ReadWrite"
           },
@@ -92,8 +92,8 @@
               "lun": 0,
               "name": "[concat(parameters('vmName'),'-datadisk1')]",
               "createOption": "Empty",
-              "vhd": {
-                "uri": "[concat('https', '://', parameters('vmStorageAccountName'), '.blob.core.windows.net/', parameters('vmStorageAccountContainerName'), '/', tolower(parameters('vmName')), 'datadisk1.vhd')]"
+              "managedDisk": {
+                  "storageAccountType": "Standard_LRS"
               },
               "caching": "None",
               "diskSizeGB": "[parameters('vmDataDiskSize')]"
