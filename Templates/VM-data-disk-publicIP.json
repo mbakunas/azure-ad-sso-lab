@@ -19,14 +19,6 @@
       "type": "securestring",
       "defaultValue": null
     },
-    "vmStorageAccountName": {
-      "type": "string",
-      "defaultValue": null
-    },
-    "vmStorageAccountContainerName": {
-      "type": "string",
-      "defaultValue": "vhds"
-    },
     "vmNIcSubnetId": {
       "type": "string",
       "defaultValue": null
