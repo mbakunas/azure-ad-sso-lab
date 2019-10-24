@@ -111,7 +111,7 @@
         {
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('vmName'),'/MakeDC')]",
-          "apiVersion": "2015-06-15",
+          "apiVersion": "2018-06-30",
           "location": "[resourceGroup().location]",
           "dependsOn": [
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
@@ -119,7 +119,7 @@
           "properties": {
             "publisher": "Microsoft.Powershell",
             "type": "DSC",
-            "typeHandlerVersion": "2.18",
+            "typeHandlerVersion": "2.77",
             "autoUpgradeMinorVersion": true,
             "settings": {
               "ModulesUrl": "[variables('adModulesURL')]",
