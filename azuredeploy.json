@@ -92,7 +92,7 @@
       "metadata": {
         "description": "The size of the VM hosting AD DS"
       },
-      "defaultValue": "Standard_D1_v2"
+      "defaultValue": "Standard_D2_v2"
     },
     "domainControllerIpAddress": {
       "type": "string",
@@ -136,7 +136,7 @@
       "metadata": {
         "description": "The size of the remote desktop VM"
       },
-      "defaultValue": "Standard_D1_v2"
+      "defaultValue": "Standard_D2_v2"
     },
     "adfsServerName": {
       "type": "string",
