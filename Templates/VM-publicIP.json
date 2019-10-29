@@ -122,7 +122,7 @@
       },
       "publicIPaddress": {
         "type": "string",
-        "value": "[reference(concat(parameters('vmName'),'-IP')).properties.ipAddress]"
+        "value": "[reference(concat(parameters('vmName'),'-IP')).ipAddress]"
       }
   }
 }
