@@ -126,7 +126,7 @@
 
   "outputs": {
       "serverIPaddress": {
-        "type": "string",
+        "type": "object",
         "value": "[reference(concat(parameters('vmName'),'-NIC'))]"
       }
   }
