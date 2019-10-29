@@ -131,7 +131,7 @@
       "properties": {
         "ipConfigurations": [
           {
-            "name": "ipconfig",
+            "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
