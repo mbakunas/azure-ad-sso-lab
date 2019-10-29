@@ -130,10 +130,6 @@
       "serverIPaddress": {
         "type": "string",
         "value": "[reference(concat(parameters('vmName'),'-NIC')).ipConfigurations[0].privateIPAddress]"
-      },
-      "serverIPaddress2": {
-        "type": "string",
-        "value": "[reference(parameters('vmName'),'-NIC').serverIPaddress]"
       }
   }
 }
