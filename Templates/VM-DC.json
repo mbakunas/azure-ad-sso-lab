@@ -9,7 +9,7 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": null
+      "defaultValue": "Standard_D2_v2"
     },
     "adminUsername": {
       "type": "string",
@@ -28,7 +28,7 @@
       "metadata": {
         "description": "The location of resources such as templates and DSC modules upon which the script is dependent"
       },
-      "defaultValue": null
+      "defaultValue": "https://raw.githubusercontent.com/mbakunas/azure-ad-sso-lab/master/"
     },
     "domainName": {
       "type": "string",
@@ -39,7 +39,7 @@
     },
     "dcIpAddress": {
       "type": "string",
-      "defaultValue": null
+      "defaultValue": "10.0.1.4"
     }
   },
 
