@@ -28,7 +28,7 @@
       "metadata": {
         "description": "The location of resources such as templates and DSC modules upon which the script is dependent"
       },
-      "defaultValue": "https://raw.githubusercontent.com/mbakunas/azure-ad-sso-lab/master/"
+      "defaultValue": "https://raw.githubusercontent.com/mbakunas/azure-ad-sso-lab/master/DSC/"
     },
     "domainName": {
       "type": "string",
