@@ -74,8 +74,6 @@
     "domainControllerSize": {
       "type": "string",
       "allowedValues": [
-        "Standard_D1_v2",
-        "Standard_DS1_v2",
         "Standard_D2_v2",
         "Standard_DS2_v2",
         "Standard_D3_v2",
@@ -118,8 +116,6 @@
     "remoteDesktopGatewaySize": {
       "type": "string",
       "allowedValues": [
-        "Standard_D1_v2",
-        "Standard_DS1_v2",
         "Standard_D2_v2",
         "Standard_DS2_v2",
         "Standard_D3_v2",
@@ -148,8 +144,6 @@
     "adfsServerSize": {
       "type": "string",
       "allowedValues": [
-        "Standard_D1_v2",
-        "Standard_DS1_v2",
         "Standard_D2_v2",
         "Standard_DS2_v2",
         "Standard_D3_v2",
@@ -166,7 +160,7 @@
       "metadata": {
         "description": "The size of the VM hosting the first server in the ADFS farm"
       },
-      "defaultValue": "Standard_D1_v2"
+      "defaultValue": "Standard_D2_v2"
     },
     "adfsServerDataDiskSize": {
       "type": "string",
@@ -185,8 +179,6 @@
     "adfsProxySize": {
       "type": "string",
       "allowedValues": [
-        "Standard_D1_v2",
-        "Standard_DS1_v2",
         "Standard_D2_v2",
         "Standard_DS2_v2",
         "Standard_D3_v2",
@@ -203,7 +195,7 @@
       "metadata": {
         "description": "The size of the ADFS web proxy VM"
       },
-      "defaultValue": "Standard_D1_v2"
+      "defaultValue": "Standard_D2_v2"
     },
     "adfsProxyDataDiskSize": {
       "type": "string",
@@ -222,8 +214,6 @@
     "dirSyncServerSize": {
       "type": "string",
       "allowedValues": [
-        "Standard_D1_v2",
-        "Standard_DS1_v2",
         "Standard_D2_v2",
         "Standard_DS2_v2",
         "Standard_D3_v2",
@@ -240,7 +230,7 @@
       "metadata": {
         "description": "The size of the synchronization engine VM"
       },
-      "defaultValue": "Standard_D1_v2"
+      "defaultValue": "Standard_D2_v2"
     },
     "dirSyncServerDataDiskSize": {
       "type": "string",
