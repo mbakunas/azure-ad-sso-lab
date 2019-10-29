@@ -99,7 +99,8 @@
           }
         ]
       }
-    },
+    }
+    /*
     {
         "name": "[concat('shutdown-computevm-',parameters('vmName'))]",
         "type": "Microsoft.DevTestLab/schedules",
@@ -122,12 +123,17 @@
             "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
         ]
     }
+    */
   ],
 
   "outputs": {
       "serverIPaddress": {
         "type": "string",
-        "value": "[reference(concat(parameters('vmName'),'-NIC')).ipconfig1.privateIPAddress]"
+        "value": "[reference(concat(parameters('vmName'),'-NIC')).ipConfigurations[0].privateIPAddress]"
+      },
+      "serverIPaddress2": {
+        "type": "string",
+        "value": "[reference(parameters('vmName'),'-NIC').serverIPaddress]"
       }
   }
 }
