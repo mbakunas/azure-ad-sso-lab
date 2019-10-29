@@ -82,7 +82,7 @@
             "name": "[concat(parameters('vmName'),'-osdisk')]",
             "createOption": "FromImage",
             "managedDisk": {
-                "storageAccountType": "Standard_LRS"
+                "storageAccountType": "StandardSSD_LRS"
             },
             "caching": "ReadWrite"
           },
@@ -92,7 +92,7 @@
               "name": "[concat(parameters('vmName'),'-datadisk1')]",
               "createOption": "Empty",
               "managedDisk": {
-                  "storageAccountType": "Standard_LRS"
+                  "storageAccountType": "StandardSSD_LRS"
               },
               "caching": "None",
               "diskSizeGB": "10"

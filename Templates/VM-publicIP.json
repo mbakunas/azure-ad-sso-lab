@@ -62,7 +62,7 @@
             "name": "[concat(parameters('vmName'),'-osdisk')]",
             "createOption": "FromImage",
             "managedDisk": {
-                "storageAccountType": "Standard_LRS"
+                "storageAccountType": "StandardSSD_LRS"
             }
           }
         },
