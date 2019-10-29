@@ -127,7 +127,7 @@
   "outputs": {
       "serverIPaddress": {
         "type": "string",
-        "value": "[reference(concat(parameters('vmName'),'-NIC')).ipConfigurations.ipconfig1.privateIPAddress]"
+        "value": "[reference(concat(parameters('vmName'),'-NIC')).ipconfig1.privateIPAddress]"
       }
   }
 }
