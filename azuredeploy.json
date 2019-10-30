@@ -27,31 +27,43 @@
     "subnet1Name": {
       "type": "string",
       "metadata": {
-        "description": "The name of the subnet created in the new VNet"
+        "description": "The name of the external subnet created in the new VNet"
       },
       "defaultValue": "ExtraNet"
     },
     "subnet1AddressSpace": {
       "type": "string",
       "metadata": {
-        "description": "The address range of the subnet created in the new VNet"
+        "description": "The address range of the external subnet created in the new VNet"
       },
-      "defaultValue": "10.0.0.0/25"
+      "defaultValue": "10.0.0.0/26"
     },
     "subnet2Name": {
       "type": "string",
+      "metadata": {
+        "description": "The name of the internal subnet created in the new VNet"
+      },
       "defaultValue": "CorpNet"
     },
     "subnet2AddressSpace": {
       "type": "string",
+      "metadata": {
+        "description": "The address range of the internal subnet created in the new VNet"
+      },
       "defaultValue": "10.0.1.0/24"
     },
     "firewallAddressSpace": {
       "type": "string",
+      "metadata": {
+        "description": "The address range of the Azure Firewall subnet created in the new VNet"
+      },
       "defaultValue": "10.0.0.64/26"
     },
     "bastionAddressSpace": {
       "type": "string",
+      "metadata": {
+        "description": "The address range of the Azure Bastion subnet created in the new VNet"
+      },
       "defaultValue": "10.0.0.128/26"
     },
     "networkSecurityGroupName": {
@@ -147,7 +159,7 @@
       "metadata": {
         "description": "The name of the VM hosting the first server in the ADFS farm"
       },
-      "defaultValue": "ADFSSTS01"
+      "defaultValue": "ADFSS01"
     },
     "adfsServerSize": {
       "type": "string",
@@ -217,7 +229,7 @@
       "metadata": {
         "description": "The name of the synchronization engine VM (Azure AD Connect will be run on this VM)"
       },
-      "defaultValue": "DIRSYNC01"
+      "defaultValue": "SYNC01"
     },
     "dirSyncServerSize": {
       "type": "string",
