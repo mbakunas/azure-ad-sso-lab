@@ -136,19 +136,17 @@
               "ConfigurationMode":"ApplyOnly",
               "RebootNodeIfNeeded":true,
               "AllowModuleOverWrite":true,
-              "properties": [
-                {
-                  "DomainName": "[parameters('domainName')]",
-                  "AdminCreds": {
-                    "UserName": "[parameters('adminUserName')]",
-                    "Password": "PrivateSettingsRef:AdminPassword"
-                  }
-                }
-              ]
+              "configurationArguments": {
+                "DomainName": "[parameters('domainName')]"
+              }
+              
             },
             "protectedSettings": {
-              "Items": {
-                "AdminPassword": "[parameters('adminPassword')]"
+              "configurationArguments": {
+                "AdminCreds": {
+                  "UserName": "[parameters('adminUserName')]",
+                  "Password": "[parameters('adminPassword')]"
+                }
               }
             }
           }
