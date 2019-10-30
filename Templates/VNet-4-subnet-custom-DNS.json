@@ -4,7 +4,7 @@
   "parameters": {
     "vnetName": {
       "type": "string",
-      "defaultValue": "[concat(resourceGroup().name,'-VNet01')]"
+      "defaultValue": "VNet01"
     },
     "vnetAddressSpace": {
       "type": "string",
