@@ -16,7 +16,7 @@
     },
     "subnet1AddressSpace": {
       "type": "string",
-      "defaultValue": "10.0.0.0/25"
+      "defaultValue": "10.0.0.0/26"
     },
     "subnet2Name": {
       "type": "string",
@@ -26,6 +26,10 @@
       "type": "string",
       "defaultValue": "10.0.1.0/24"
     },
+    "firewallAddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.0.64/26"
+    },
     "networkSecurityGroupName": {
       "type": "string",
       "defaultValue": "NetworkSecurityGroup"
@@ -33,14 +37,15 @@
   },
 
   "variables": {
-    "apiVersion": "2016-03-30"
+    "firewallSubnetName": "AzureFirewallSubnet",
+    "bastionSubnetName": "AzureBastionSubnet"
   },
 
   "resources": [
     {
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('vnetName')]",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2019-09-01",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
@@ -66,6 +71,12 @@
                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
               }
             }
+          },
+          {
+            "name": "[variables('firewallSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('firewallAddressSpace')]"
+            }
           }
         ]
       }
@@ -74,16 +85,16 @@
     {
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[parameters('networkSecurityGroupName')]",
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "2019-09-01",
       "location": "[resourceGroup().location]",
       "properties": {
         "securityRules": [
           {
-            "name": "[concat('inbound-allow-',toLower(parameters('subnet1Name')),'-433')]",
+            "name": "[concat('inbound-allow-',toLower(parameters('subnet1Name')),'-443')]",
             "properties": {
               "protocol": "Tcp",
               "sourcePortRange": "*",
-              "destinationPortRange": "433",
+              "destinationPortRange": "443",
               "sourceAddressPrefix": "[parameters('subnet1AddressSpace')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
@@ -143,6 +154,10 @@
     "subnet2": {
       "type": "string",
       "value": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnet2Name'))]"
+    },
+    "firewallsubnet": {
+      "type": "string",
+      "value": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/',variables('firewallSubnetName'))]"
     }
   }
 
