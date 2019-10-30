@@ -130,7 +130,7 @@
                 "function":"MakeDC"
               },
               "configurationData": {
-                "url": "https://raw.githubusercontent.com/mbakunas/azure-ad-sso-lab/master/DSC/MakeDC.psd1"
+                "url": "[variables('adConfigurationDataURL')]"
               },
               "ActionAfterReboot":"ContinueConfiguration",
               "ConfigurationMode":"ApplyOnly",
