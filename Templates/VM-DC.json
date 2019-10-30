@@ -136,16 +136,10 @@
               "ConfigurationMode":"ApplyOnly",
               "RebootNodeIfNeeded":true,
               "AllowModuleOverWrite":true,
-              "properties": [
+              "configurationArguements": [
                 {
-                  "TypeName": "string",
-                  "Name": "DomainName",
-                  "value": "[parameters('domainName')]"
-                },
-                {
-                  "Typename": "System.Management.Automation.PSCredential",
-                  "Name": "AdminCreds",
-                  "Value": {
+                  "DomainName": "[parameters('domainName')]",
+                  "AdminCreds": {
                     "UserName": "[parameters('adminUserName')]",
                     "Password": "PrivateSettingsRef:AdminPassword"
                   }
