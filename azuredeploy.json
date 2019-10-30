@@ -46,6 +46,14 @@
       "type": "string",
       "defaultValue": "10.0.1.0/24"
     },
+    "firewallAddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.0.64/26"
+    },
+    "bastionAddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.0.128/26"
+    },
     "networkSecurityGroupName": {
       "type": "string",
       "defaultValue": null
@@ -264,7 +272,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'VNet-2-subnet.json')]",
+          "uri": "[concat(variables('templateLocationURI'), 'VNet-4-subnet.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -274,6 +282,8 @@
           "subnet1AddressSpace": { "value": "[parameters('subnet1AddressSpace')]" },
           "subnet2Name": { "value": "[parameters('subnet2Name')]" },
           "subnet2AddressSpace": { "value": "[parameters('subnet2AddressSpace')]" },
+          "firewallAddressSpace": {"value":"[parameters('firewallAddressSpace')]"},
+          "bastionAddressSpace":{"value":"[parameters('bastionAddressSpace')]"},
           "networkSecurityGroupName": { "value": "[parameters('networkSecurityGroupName')]" }
         }
       }
@@ -313,7 +323,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'VNet-2-subnet-custom-DNS.json')]",
+          "uri": "[concat(variables('templateLocationURI'), 'VNet-4-subnet-custom-DNS.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -323,6 +333,8 @@
           "subnet1AddressSpace": { "value": "[parameters('subnet1AddressSpace')]" },
           "subnet2Name": { "value": "[parameters('subnet2Name')]" },
           "subnet2AddressSpace": { "value": "[parameters('subnet2AddressSpace')]" },
+          "firewallAddressSpace": {"value":"[parameters('firewallAddressSpace')]"},
+          "bastionAddressSpace":{"value":"[parameters('bastionAddressSpace')]"},
           "networkSecurityGroupName": { "value": "[parameters('networkSecurityGroupName')]" },
           "dnsServers": {
             "value": [
