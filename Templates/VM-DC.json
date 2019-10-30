@@ -136,7 +136,7 @@
               "ConfigurationMode":"ApplyOnly",
               "RebootNodeIfNeeded":true,
               "AllowModuleOverWrite":true,
-              "configurationArguements": [
+              "properties": [
                 {
                   "DomainName": "[parameters('domainName')]",
                   "AdminCreds": {
