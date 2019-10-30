@@ -94,23 +94,17 @@
     "domainControllerSize": {
       "type": "string",
       "allowedValues": [
+        "Standard_A2m_v2",
+        "Standard_A4_v2",
+        "Standard_A4m_v2",
         "Standard_D2_v2",
-        "Standard_DS2_v2",
-        "Standard_D3_v2",
-        "Standard_DS3_v2",
-        "Standard_D4_v2",
-        "Standard_DS4_v2",
-        "Standard_D11_v2",
-        "Standard_DS11_v2",
-        "Standard_D12_v2",
-        "Standard_DS12_v2",
-        "Standard_D13_v2",
-        "Standard_DS13_v2"
+        "Standard_D2_v3",
+        "Standard_D4_v3"
       ],
       "metadata": {
         "description": "The size of the VM hosting AD DS"
       },
-      "defaultValue": "Standard_D2_v2"
+      "defaultValue": "Standard_D2_v3"
     },
     "domainControllerIpAddress": {
       "type": "string",
@@ -136,23 +130,17 @@
     "remoteDesktopGatewaySize": {
       "type": "string",
       "allowedValues": [
+        "Standard_A2m_v2",
+        "Standard_A4_v2",
+        "Standard_A4m_v2",
         "Standard_D2_v2",
-        "Standard_DS2_v2",
-        "Standard_D3_v2",
-        "Standard_DS3_v2",
-        "Standard_D4_v2",
-        "Standard_DS4_v2",
-        "Standard_D11_v2",
-        "Standard_DS11_v2",
-        "Standard_D12_v2",
-        "Standard_DS12_v2",
-        "Standard_D13_v2",
-        "Standard_DS13_v2"
+        "Standard_D2_v3",
+        "Standard_D4_v3"
       ],
       "metadata": {
         "description": "The size of the remote desktop VM"
       },
-      "defaultValue": "Standard_D2_v2"
+      "defaultValue": "Standard_D2_v3"
     },
     "adfsServerName": {
       "type": "string",
@@ -164,23 +152,17 @@
     "adfsServerSize": {
       "type": "string",
       "allowedValues": [
+        "Standard_A2m_v2",
+        "Standard_A4_v2",
+        "Standard_A4m_v2",
         "Standard_D2_v2",
-        "Standard_DS2_v2",
-        "Standard_D3_v2",
-        "Standard_DS3_v2",
-        "Standard_D4_v2",
-        "Standard_DS4_v2",
-        "Standard_D11_v2",
-        "Standard_DS11_v2",
-        "Standard_D12_v2",
-        "Standard_DS12_v2",
-        "Standard_D13_v2",
-        "Standard_DS13_v2"
+        "Standard_D2_v3",
+        "Standard_D4_v3"
       ],
       "metadata": {
         "description": "The size of the VM hosting the first server in the ADFS farm"
       },
-      "defaultValue": "Standard_D2_v2"
+      "defaultValue": "Standard_D2_v3"
     },
     "adfsServerDataDiskSize": {
       "type": "string",
@@ -199,23 +181,17 @@
     "adfsProxySize": {
       "type": "string",
       "allowedValues": [
+        "Standard_A2m_v2",
+        "Standard_A4_v2",
+        "Standard_A4m_v2",
         "Standard_D2_v2",
-        "Standard_DS2_v2",
-        "Standard_D3_v2",
-        "Standard_DS3_v2",
-        "Standard_D4_v2",
-        "Standard_DS4_v2",
-        "Standard_D11_v2",
-        "Standard_DS11_v2",
-        "Standard_D12_v2",
-        "Standard_DS12_v2",
-        "Standard_D13_v2",
-        "Standard_DS13_v2"
+        "Standard_D2_v3",
+        "Standard_D4_v3"
       ],
       "metadata": {
         "description": "The size of the ADFS web proxy VM"
       },
-      "defaultValue": "Standard_D2_v2"
+      "defaultValue": "Standard_D2_v3"
     },
     "adfsProxyDataDiskSize": {
       "type": "string",
@@ -234,23 +210,17 @@
     "dirSyncServerSize": {
       "type": "string",
       "allowedValues": [
+        "Standard_A2m_v2",
+        "Standard_A4_v2",
+        "Standard_A4m_v2",
         "Standard_D2_v2",
-        "Standard_DS2_v2",
-        "Standard_D3_v2",
-        "Standard_DS3_v2",
-        "Standard_D4_v2",
-        "Standard_DS4_v2",
-        "Standard_D11_v2",
-        "Standard_DS11_v2",
-        "Standard_D12_v2",
-        "Standard_DS12_v2",
-        "Standard_D13_v2",
-        "Standard_DS13_v2"
+        "Standard_D2_v3",
+        "Standard_D4_v3"
       ],
       "metadata": {
         "description": "The size of the synchronization engine VM"
       },
-      "defaultValue": "Standard_D2_v2"
+      "defaultValue": "Standard_D2_v3"
     },
     "dirSyncServerDataDiskSize": {
       "type": "string",
