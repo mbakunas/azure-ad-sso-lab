@@ -30,6 +30,10 @@
       "type": "string",
       "defaultValue": "10.0.0.64/26"
     },
+    "bastionAddressSpace": {
+      "type": "string",
+      "defaultValue": "10.0.0.128/26"
+    },
     "networkSecurityGroupName": {
       "type": "string",
       "defaultValue": "NetworkSecurityGroup"
@@ -85,6 +89,12 @@
             "name": "[variables('firewallSubnetName')]",
             "properties": {
               "addressPrefix": "[parameters('firewallAddressSpace')]"
+            }
+          },
+          {
+            "name": "[variables('bastionSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('bastionAddressSpace')]"
             }
           }
         ]
