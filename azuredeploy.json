@@ -147,7 +147,7 @@
       "metadata": {
         "description": "The name of the VM hosting the first server in the ADFS farm"
       },
-      "defaultValue": "ADFSS01"
+      "defaultValue": "ADFS01"
     },
     "adfsServerSize": {
       "type": "string",
