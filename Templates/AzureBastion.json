@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "bastionName": {
+            "defaultValue": "AZFW-Test02-VNet01-bastion",
+            "type": "String"
+        },
+        "bastionVNetName": {
+            "defaultValue": "AZFW-Test02-VNet01",
+            "type": "String"
+        }
+    },
+    "variables": {
+        "publicIPaddressName": "[concat(parameters('bastionName'),'-publicIP')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/bastionHosts",
+            "apiVersion": "2019-09-01",
+            "name": "[parameters('bastionName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPaddressName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPaddressName'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(parameters('bastionVNetName'), '/subnets/AzureBastionSubnet')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('publicIPaddressName')]",
+            "location": "resourceGroup().location",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        }
+    ],
+    "outputs": {}
+}

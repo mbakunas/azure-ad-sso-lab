@@ -120,28 +120,6 @@
       },
       "defaultValue": "contoso.com"
     },
-    "remoteDesktopGatewayName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the remote desktop VM"
-      },
-      "defaultValue": "RDGW01"
-    },
-    "remoteDesktopGatewaySize": {
-      "type": "string",
-      "allowedValues": [
-        "Standard_A2m_v2",
-        "Standard_A4_v2",
-        "Standard_A4m_v2",
-        "Standard_D2_v2",
-        "Standard_D2_v3",
-        "Standard_D4_v3"
-      ],
-      "metadata": {
-        "description": "The size of the remote desktop VM"
-      },
-      "defaultValue": "Standard_D2_v3"
-    },
     "adfsServerName": {
       "type": "string",
       "metadata": {
@@ -228,6 +206,13 @@
         "description": "The size of the data disk on the synchronization engine VM"
       },
       "defaultValue": "50"
+    },
+    "bastionName": {
+    "type": "String",
+      "metadata": {
+        "description": "The name of the bastion host for the VNet"
+      },
+    "defaultValue": null
     }
   },
 
@@ -238,12 +223,12 @@
     "Network-AzureDNS-DeploymentName": "[concat(variables('deploymentName'),'-Nework-AzureDNS')]",
     "DomainController-DeploymentName": "[concat(variables('deploymentName'), '-DomainController')]",
     "Network-CustomDNS-DeploymentName": "[concat(variables('deploymentName'), '-Network-CustomDNS')]",
-    "RemoteDesktop-DeploymentName": "[concat(variables('deploymentName'),'-RemoteDesktop')]",
     "ADFS-Server-DeploymentName": "[concat(variables('deploymentName'),'-ADFS')]",
     "ADFS-Server-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-ADFS-DomainJoin')]",
     "ADFS-Proxy-DeploymentName": "[concat(variables('deploymentName'),'-ADFS-Proxy')]",
     "DirSync-DeploymentName": "[concat(variables('deploymentName'),'-DirSync')]",
-    "DirSync-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-DirSync-DomainJoin')]"
+    "DirSync-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-DirSync-DomainJoin')]",
+    "BastionHost-DeploymentName": "[[concat(variables('deploymentName'),'-BastionHost')]"
   },
 
   "resources": [
@@ -323,28 +308,6 @@
               "[parameters('domainControllerIpAddress')]"
             ]
           }
-        }
-      }
-    },
-    {
-      "name": "[variables('RemoteDesktop-DeploymentName')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-02-01",
-      "dependsOn": [
-        "[variables('Network-CustomDNS-DeploymentName')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('templateLocationURI'), 'VM-publicIP.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "vmName": { "value": "[parameters('remoteDesktopGatewayName')]" },
-          "vmSize": { "value": "[parameters('remoteDesktopGatewaySize')]" },
-          "adminUsername": { "value": "[parameters('adminUsername')]" },
-          "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "vmNIcSubnetId": { "value": "[reference(variables('Network-CustomDNS-DeploymentName')).outputs.Subnet1.value]" }
         }
       }
     },
@@ -461,6 +424,25 @@
           "domainPassword": { "value": "[parameters('adminPassword')]" }
         }
       }
+    },
+    {
+      "name": "[variables('BastionHost-DeploymentName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-02-01",
+      "dependsOn": [
+        "[variables('Network-CustomDNS-DeploymentName')]"
+      ],
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "[concat(variables('templateLocationURI'), 'AzureBastion.json')]",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "bastionName": { "value": "[parameters('bastionName')]" },
+            "bastionVNetName": { "value": "[parameters('vnetName')]" }
+          }
+        }
     }
   ],
 
