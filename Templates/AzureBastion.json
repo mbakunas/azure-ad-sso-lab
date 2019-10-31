@@ -33,7 +33,7 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPaddressName'))]"
                             },
                             "subnet": {
-                                "id": "[concat(parameters('bastionVNetName'), '/subnets/AzureBastionSubnet')]"
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('bastionVNetName')), '/subnets/AzureBastionSubnet')]"
                             }
                         }
                     }
