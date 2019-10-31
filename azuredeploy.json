@@ -228,7 +228,7 @@
     "ADFS-Proxy-DeploymentName": "[concat(variables('deploymentName'),'-ADFS-Proxy')]",
     "DirSync-DeploymentName": "[concat(variables('deploymentName'),'-DirSync')]",
     "DirSync-DomainJoin-DeploymentName": "[concat(variables('deploymentName'),'-DirSync-DomainJoin')]",
-    "BastionHost-DeploymentName": "[[concat(variables('deploymentName'),'-BastionHost')]"
+    "BastionHost-DeploymentName": "[concat(variables('deploymentName'),'-BastionHost')]"
   },
 
   "resources": [
