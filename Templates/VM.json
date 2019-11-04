@@ -5,7 +5,7 @@
   "parameters": {
     "vmName": {
       "type": "string",
-      "defaultValue": "DC01"
+      "defaultValue": "VM01"
     },
     "vmSize": {
       "type": "string",
@@ -26,6 +26,13 @@
     "vmNIcSubnetName": {
       "type": "string",
       "defaultValue": null
+    },
+    "ipAddress":{
+      "type":"string",
+      "defaultValue":null,
+      "metadata":{
+        "desription":"ip address of the VM or leave blank for dynamic assignment"
+      }
     },
     "configAutoShutdown": {
       "type":"string",
@@ -102,10 +109,11 @@
           {
               "name": "ipconfig1",
               "properties": {
+                  "privateIPAllocationMethod": "[if(equals(parameters('ipAddress'), json('null')), 'Dynamic', 'Static')]",
+                  "privateIPAddress": "[if(equals(parameters('ipAddress'), json('null')), json('null'), parameters('ipAddress'))]",
                   "subnet": {
                       "id": "[variables('subnetRef')]"
-                  },
-                  "privateIPAllocationMethod": "Dynamic"
+                  }
               }
           }
         ]
