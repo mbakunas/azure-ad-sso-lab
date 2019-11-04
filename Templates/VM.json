@@ -99,12 +99,11 @@
           }
         ]
       }
-    }
-    /*
+    },
     {
         "name": "[concat('shutdown-computevm-',parameters('vmName'))]",
         "type": "Microsoft.DevTestLab/schedules",
-        "apiVersion": "2017-04-26-preview",
+        "apiVersion": "2016-05-15",
         "location": "[resourceGroup().location]",
         "properties": {
             "status": "Enabled",
@@ -112,18 +111,17 @@
             "dailyRecurrence": {
                 "time": "19:00"
             },
-            "timeZoneId": "Central Standard Time",
+            "timeZoneId": "Eastern Standard Time",
             "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]",
             "notificationSettings": {
                 "status": "Disabled",
-                "timeInMinutes": "30"
+                "timeInMinutes": 30
             }
         },
         "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
         ]
     }
-    */
   ],
 
   "outputs": {
