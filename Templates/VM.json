@@ -105,6 +105,9 @@
         "type": "Microsoft.DevTestLab/schedules",
         "apiVersion": "2016-05-15",
         "location": "[resourceGroup().location]",
+        "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+        ],
         "properties": {
             "status": "Enabled",
             "taskType": "ComputeVmShutdownTask",
@@ -117,10 +120,7 @@
                 "status": "Disabled",
                 "timeInMinutes": 30
             }
-        },
-        "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-        ]
+        }
     }
   ],
 
