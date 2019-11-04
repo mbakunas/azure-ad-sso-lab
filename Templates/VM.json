@@ -29,9 +29,9 @@
     },
     "ipAddress":{
       "type":"string",
-      "defaultValue":null,
+      "defaultValue":"dynamic",
       "metadata":{
-        "desription":"ip address of the VM or leave blank for dynamic assignment"
+        "desription":"ip address of the VM or 'dynamic' for dynamic assignment"
       }
     },
     "configAutoShutdown": {
@@ -109,8 +109,8 @@
           {
               "name": "ipconfig1",
               "properties": {
-                  "privateIPAllocationMethod": "[if(equals(parameters('ipAddress'), json('null')), 'Dynamic', 'Static')]",
-                  "privateIPAddress": "[if(equals(parameters('ipAddress'), json('null')), json('null'), parameters('ipAddress'))]",
+                  "privateIPAllocationMethod": "[if(equals(parameters('ipAddress'), 'dynamic'), 'Dynamic', 'Static')]",
+                  "privateIPAddress": "[if(equals(parameters('ipAddress'), 'dynamic'), json('null'), parameters('ipAddress'))]",
                   "subnet": {
                       "id": "[variables('subnetRef')]"
                   }
