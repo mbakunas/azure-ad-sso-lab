@@ -167,8 +167,8 @@
         "settings": {
           "wmfVersion": "latest",
           "configuration": {
-            "ModulesUrl": "[variables('dataDisksModulesURL')]",
-            "ConfigurationFunction": "[variables('dataDisksConfigFunction')]",
+            "url": "[variables('dataDisksModulesURL')]",
+            "script": "[variables('dataDisksConfigFunction')]",
             "function": "[variables('dataDisksFunction')]"
           }
         }
