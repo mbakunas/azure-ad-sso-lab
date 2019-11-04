@@ -26,6 +26,17 @@
     "vmNIcSubnetName": {
       "type": "string",
       "defaultValue": null
+    },
+    "configAutoShutdown": {
+      "type":"string",
+      "allowedValues":[
+        "yes",
+        "no"
+      ],
+      "defaultValue":"yes",
+      "metadata":{
+        "description":"option to configure autoshutdown on the VM"
+      }
     }
   },
 
@@ -102,6 +113,7 @@
     },
     {
         "name": "[concat('shutdown-computevm-',parameters('vmName'))]",
+        "condition":"[equals(parameters('configAutoShutdown'),'yes')]",
         "type": "Microsoft.DevTestLab/schedules",
         "apiVersion": "2016-05-15",
         "location": "[resourceGroup().location]",
