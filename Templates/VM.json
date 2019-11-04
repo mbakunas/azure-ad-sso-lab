@@ -34,6 +34,16 @@
         "desription":"ip address of the VM or 'dynamic' for dynamic assignment"
       }
     },
+    "numDataDisks":{
+        "type":"int",
+        "defaultValue":0,
+        "minValue": 0,
+        "maxValue": 1
+    },
+    "dataDiskSize":{
+      "type":"string",
+      "defaultValue":"50"
+    },
     "configAutoShutdown": {
       "type":"string",
       "allowedValues":[
@@ -88,7 +98,21 @@
             "managedDisk": {
                 "storageAccountType": "StandardSSD_LRS"
             }
-          }
+          },
+          "copy": [{
+            "name": "dataDisks",
+            "count": "[parameters('numDataDisks')]",
+            "input": {
+              "lun": "[copyIndex('dataDisks')]",
+              "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks',1))]",
+              "createOption": "empty",
+              "managedDisk": {
+                  "storageAccountType": "StandardSSD_LRS"
+              },
+              "caching": "None",
+              "diskSizeGB": "[parameters('dataDiskSize')]"
+            }
+          }]
         },
         "networkProfile": {
           "networkInterfaces": [
