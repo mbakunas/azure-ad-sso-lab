@@ -18,7 +18,7 @@ The virtual network has two subnets:  an external-facing subnet an an internal s
 
 This template deploys Azure Bastion so no gateway/jump host is needed.
 
-**NOTE:** Because Azure Bastion is in public preview it's only available in the following regions:
+**NOTE:** Because Azure Bastion just went GA it's only available in the following regions:
 <ul>
     <li>West US</li>
     <li>East US</li>
