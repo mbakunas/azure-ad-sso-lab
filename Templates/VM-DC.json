@@ -19,6 +19,10 @@
       "type": "securestring",
       "defaultValue": null
     },
+    "userPassword": {
+      "type": "securestring",
+      "defaultValue": null
+    },
     "vmNIcSubnetId": {
       "type": "string",
       "defaultValue": null
@@ -137,7 +141,8 @@
               "RebootNodeIfNeeded":true,
               "AllowModuleOverWrite":true,
               "configurationArguments": {
-                "DomainName": "[parameters('domainName')]"
+                "DomainName": "[parameters('domainName')]",
+                "UserPassword": "[parameters('userPassword')]"
               }
               
             },
