@@ -87,7 +87,7 @@
     "userPassword": {
       "type": "securestring",
       "metadata": {
-        "description": "The local administrator password on the VMs created"
+        "description": "The password for all sample users of the domain"
       },
       "defaultValue": null
     },
