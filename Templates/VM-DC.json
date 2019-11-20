@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
 
   "parameters": {
@@ -16,6 +16,10 @@
       "defaultValue": "AzureAdmin"
     },
     "adminPassword": {
+      "type": "securestring",
+      "defaultValue": null
+    },
+    "userPassword": {
       "type": "securestring",
       "defaultValue": null
     },
@@ -137,7 +141,8 @@
               "RebootNodeIfNeeded":true,
               "AllowModuleOverWrite":true,
               "configurationArguments": {
-                "DomainName": "[parameters('domainName')]"
+                "DomainName": "[parameters('domainName')]",
+                "UserPassword": "[parameters('userPassword')]"
               }
               
             },

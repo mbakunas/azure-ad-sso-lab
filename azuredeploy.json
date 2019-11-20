@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
 
   "parameters": {
@@ -81,6 +81,13 @@
       "type": "securestring",
       "metadata": {
         "description": "The local administrator password on the VMs created"
+      },
+      "defaultValue": null
+    },
+    "userPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The password for all sample users of the domain"
       },
       "defaultValue": null
     },
@@ -273,6 +280,7 @@
           "vmSize": { "value": "[parameters('domainControllerSize')]" },
           "adminUsername": { "value": "[parameters('adminUsername')]" },
           "adminPassword": { "value": "[parameters('adminPassword')]" },
+          "userPassword": { "value": "[parameters('userPassword')]" },
           "vmNIcSubnetId": { "value": "[reference(variables('Network-AzureDNS-DeploymentName')).outputs.Subnet2.value]" },
           "dscLocation": { "value": "[variables('dscLocationURI')]" },
           "domainName": { "value": "[parameters('adDSdomainName')]" },
