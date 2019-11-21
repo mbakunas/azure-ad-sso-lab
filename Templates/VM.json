@@ -61,6 +61,12 @@
     },
     "timeZone":{
       "type":"string",
+      "allowedValues":[
+        "Eastern Standard Time",
+        "Central Standard Time",
+        "Mountain Standard Time",
+        "Pacific Standard Time"
+      ],
       "defaultValue":"Eastern Standard Time"
     }
   },
