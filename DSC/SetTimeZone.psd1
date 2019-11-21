@@ -1,0 +1,7 @@
+﻿@{ 
+    AllNodes = @( 
+        @{ 
+            Nodename = 'localhost'
+        }
+    )
+}

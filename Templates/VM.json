@@ -58,6 +58,10 @@
       "metadata":{
         "description":"option to configure autoshutdown on the VM"
       }
+    },
+    "timeZone":{
+      "type":"string",
+      "defaultValue":"Eastern Standard Time"
     }
   },
 
@@ -67,7 +71,10 @@
     "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('vmNIcSubnetName'))]",
     "dataDisksModulesURL": "[concat(parameters('dscModulesURL'),'FormatDisk.ps1.zip')]",
     "dataDisksConfigFunction": "FormatDisk.ps1",
-    "dataDisksFunction": "FormatDisk"
+    "dataDisksFunction": "FormatDisk",
+    "timeZoneModulesURL": "[concat(parameters('dscModulesURL'),'SetTimeZone.ps1.zip')]",
+    "timeZoneConfigFunction": "SetTimeZone.ps1",
+    "timeZoneFunction": "SetTimeZone"
   },
 
   "resources": [
@@ -175,6 +182,32 @@
       }
     },
     {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('vmName'),'/',variables('timeZoneFunction'))]",
+      "apiVersion": "2019-07-01",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.77",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "latest",
+          "configuration": {
+            "url": "[variables('timeZoneModulesURL')]",
+            "script": "[variables('timeZoneConfigFunction')]",
+            "function": "[variables('timeZoneFunction')]"
+          },
+          "configurationArguments": {
+            "timeZone": "[parameters('timeZone')]"
+          }
+    }
+      }
+    },
+    {
         "name": "[concat('shutdown-computevm-',parameters('vmName'))]",
         "condition":"[equals(parameters('configAutoShutdown'),'yes')]",
         "type": "Microsoft.DevTestLab/schedules",
@@ -189,7 +222,7 @@
             "dailyRecurrence": {
                 "time": "19:00"
             },
-            "timeZoneId": "Eastern Standard Time",
+            "timeZoneId": "[parameters('timeZone')]",
             "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]",
             "notificationSettings": {
                 "status": "Disabled",
