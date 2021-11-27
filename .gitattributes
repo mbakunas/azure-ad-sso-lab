@@ -17,3 +17,4 @@
 *.RTF	 diff=astextplain
 
 *.ps1 linguist-detectable=false
+*.psd1 linguist-detectable=false
